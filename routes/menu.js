@@ -7,14 +7,19 @@ const {
   delBlog
 } = require("../controller/blog")
 
-const { newMenu, menuScore } = require("../controller/menu")
+const {
+  newMenu,
+  menuScore,
+  menuList,
+  userScore
+} = require("../controller/menu")
 
 const { SuccessModel, ErrorModel } = require("../model/resModel")
 const loginCheck = require("../middleware/loginCheck")
 
 router.prefix("/menu")
 
-router.get("/list", async function (ctx, next) {
+router.get("/list1", async function (ctx, next) {
   let author = ctx.query.author || ""
   const keyword = ctx.query.keyword || ""
 
@@ -70,7 +75,7 @@ router.post("/new-menu", async function (ctx, next) {
   const { name } = ctx.request.body
   const val = await newMenu(name)
   if (val) {
-    ctx.body = new SuccessModel()
+    ctx.body = new SuccessModel(val)
   } else {
     ctx.body = new ErrorModel("创建菜单失败")
   }
@@ -83,7 +88,26 @@ router.post("/score", async function (ctx, next) {
   if (val) {
     ctx.body = new SuccessModel()
   } else {
-    ctx.body = new ErrorModel("创建菜单失败")
+    ctx.body = new ErrorModel("打分失败")
+  }
+})
+
+router.get("/list", async function (ctx, next) {
+  const list = await menuList()
+  if (list) {
+    ctx.body = new SuccessModel(list)
+  } else {
+    ctx.body = new ErrorModel("获取菜单失败")
+  }
+})
+
+router.get("/score/:userId", async function (ctx, next) {
+  const { userId } = ctx.params
+  const list = await userScore(userId)
+  if (list) {
+    ctx.body = new SuccessModel(list)
+  } else {
+    ctx.body = new ErrorModel("获取菜单失败")
   }
 })
 

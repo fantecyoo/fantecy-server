@@ -53,6 +53,7 @@ const menuScore = async data => {
     }
   } else {
     const update = `update user_menu set score=${score} where userId=${userId} and menuId=${menuId}`
+    console.log(update)
     const res = await exec(update)
     if (res.affectedRows > 0) {
       return true
@@ -60,6 +61,55 @@ const menuScore = async data => {
       return false
     }
   }
+}
+
+const menuList = async () => {
+  const getList = `
+      select * from menu
+  `
+  const menuList = await exec(getList)
+
+  console.log(menuList)
+
+  const getUserList = `
+      select * from users
+  `
+  const userList = await exec(getUserList)
+
+  for (var i = 0; i < menuList.length; i++) {
+    let menu = menuList[i]
+    const getScore = `
+      select * from user_menu where menuId=${menu.id}
+    `
+    const scoreList = await exec(getScore)
+    console.log(scoreList)
+    menu.favorUsers = scoreList.map(v => {
+      return {
+        userId: v.userId,
+        score: v.score,
+        username: userList.find(item => item.id === v.userId).name
+      }
+    })
+  }
+  return menuList
+}
+
+const userScore = async userId => {
+  const getList = `
+      select * from menu
+  `
+  const menuList = await exec(getList)
+
+  const getUserScore = `
+      select * from user_menu where userId=${userId}
+  `
+  const userScoreList = await exec(getUserScore)
+
+  menuList.forEach(item => {
+    let temp = userScoreList.find(v => v.menuId == item.id)
+    item.score = temp ? temp.score : 0
+  })
+  return menuList
 }
 
 const updateBlog = async (id, blogData = {}) => {
@@ -96,5 +146,7 @@ module.exports = {
   updateBlog,
   delBlog,
   newMenu,
-  menuScore
+  menuScore,
+  menuList,
+  userScore
 }

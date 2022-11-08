@@ -28,7 +28,16 @@ const register = async username => {
   return rows[0] || {}
 }
 
+const userList = async () => {
+  const sql = `
+    select * from users;
+  `
+  const data = await exec(sql)
+  return data
+}
+
 module.exports = {
   login,
-  register
+  register,
+  userList
 }

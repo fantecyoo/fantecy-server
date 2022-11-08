@@ -1,6 +1,6 @@
 const router = require("koa-router")()
 const { register } = require("../controller/user")
-const { ErrorModel } = require("../model/resModel")
+const { ErrorModel, SuccessModel } = require("../model/resModel")
 
 router.prefix("/users")
 

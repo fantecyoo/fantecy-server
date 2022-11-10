@@ -25,7 +25,7 @@ const register = async username => {
   `
 
   const rows = await exec(sql)
-  return rows[0] || {}
+  return rows.insertId || ""
 }
 
 const userList = async () => {

@@ -11,7 +11,8 @@ const {
   newMenu,
   menuScore,
   menuList,
-  userScore
+  userScore,
+  deleteMenu
 } = require("../controller/menu")
 
 const { SuccessModel, ErrorModel } = require("../model/resModel")
@@ -74,6 +75,16 @@ router.post("/del", loginCheck, async function (ctx, next) {
 router.post("/new-menu", async function (ctx, next) {
   const { name } = ctx.request.body
   const val = await newMenu(name)
+  if (val) {
+    ctx.body = new SuccessModel(val)
+  } else {
+    ctx.body = new ErrorModel("创建菜单失败")
+  }
+})
+
+router.get("/delete-menu/:id", async function (ctx, next) {
+  const { id } = ctx.params
+  const val = await deleteMenu(id)
   if (val) {
     ctx.body = new SuccessModel(val)
   } else {

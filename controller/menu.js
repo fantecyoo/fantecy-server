@@ -35,11 +35,26 @@ const newMenu = async menuName => {
   }
 }
 
+const deleteMenu = async id => {
+  // blogData 是一个博客对象，包含 title content author 属性
+  id = xss(id)
+
+  const sql = `
+        delete from menu where id='${id}';
+    `
+
+  const delData = await exec(sql)
+  if (delData.affectedRows > 0) {
+    return true
+  }
+  return false
+}
+
 const menuScore = async data => {
   // blogData 是一个博客对象，包含 title content author 属性
   const menuId = xss(data.menu)
   const userId = xss(data.user)
-  const score = xss(data.score)
+  const score = data.score
   console.log(data, menuId, userId, score)
   const getScore = `
         select * from user_menu where userId='${userId}' and menuId='${menuId}';
@@ -148,5 +163,6 @@ module.exports = {
   newMenu,
   menuScore,
   menuList,
-  userScore
+  userScore,
+  deleteMenu
 }

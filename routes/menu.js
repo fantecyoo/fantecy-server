@@ -18,7 +18,7 @@ const {
 const { SuccessModel, ErrorModel } = require("../model/resModel")
 const loginCheck = require("../middleware/loginCheck")
 
-router.prefix("/menu")
+router.prefix("/api/menu")
 
 router.get("/list1", async function (ctx, next) {
   let author = ctx.query.author || ""

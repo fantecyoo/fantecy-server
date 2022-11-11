@@ -2,7 +2,7 @@ const router = require("koa-router")()
 const { register, userList } = require("../controller/user")
 const { ErrorModel, SuccessModel } = require("../model/resModel")
 
-router.prefix("/users")
+router.prefix("/api/users")
 
 router.get("/", function (ctx, next) {
   ctx.body = "this is a users response!"

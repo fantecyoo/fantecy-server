@@ -22,20 +22,20 @@ jobs:
           mkdir -p ~/.ssh/
           echo "${{secrets.MY_ID_RSA}}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 116.62.36.183 >> ~/.ssh/known_hosts
+          ssh-keyscan 47.97.185.74 >> ~/.ssh/known_hosts
 
       - name: deploy # 自动发布
         run: |
-          ssh root@116.62.36.183 "
+          ssh root@47.97.185.74 "
             # 注意：服务器已经 git clone 代码到 /root/myblog/imooc-320-server 目录
 
-            cd /root/myblog/imooc-320-server;
+            cd /home/admin/fantecy/fantecy-server;
             git checkout . ;
             git checkout main;
             git pull origin main; # 重新下载最新的代码
 
             # 重启服务
-            npm install;
+            sudo npm install -registry=https://registry.npm.taobao.org;
             npm run prd;
           "
 

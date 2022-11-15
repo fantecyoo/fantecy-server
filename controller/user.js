@@ -36,8 +36,21 @@ const userList = async () => {
   return data
 }
 
+const deleteUser = async userId => {
+  const sql1 = `
+    delete from users where id = '${userId}';
+  `
+  const sql2 = `
+    delete from user_menu where userId = '${userId}';
+  `
+  let pList = [exec(sql1), exec(sql2)]
+  const data = await pList
+  return data
+}
+
 module.exports = {
   login,
   register,
-  userList
+  userList,
+  deleteUser
 }

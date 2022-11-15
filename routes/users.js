@@ -1,5 +1,5 @@
 const router = require("koa-router")()
-const { register, userList } = require("../controller/user")
+const { register, userList, deleteUser } = require("../controller/user")
 const { ErrorModel, SuccessModel } = require("../model/resModel")
 
 router.prefix("/api/users")
@@ -25,6 +25,15 @@ router.post("/new-user", async function (ctx, next) {
 router.get("/list", async function (ctx, next) {
   const data = await userList()
   console.log(data)
+  if (data) {
+    ctx.body = new SuccessModel(data)
+  } else {
+    ctx.body = new ErrorModel("登录失败")
+  }
+})
+
+router.delete("/:userId", async function (ctx, next) {
+  const data = await deleteUser(ctx.params.userId)
   if (data) {
     ctx.body = new SuccessModel(data)
   } else {
